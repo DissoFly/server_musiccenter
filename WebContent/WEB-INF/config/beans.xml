@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+        http://www.springframework.org/schema/data/jpa
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context     
+        http://www.springframework.org/schema/context/spring-context.xsd">
+		
+		
+	<context:component-scan base-package="com.dissofly.musicplayer.service" />
+	<context:component-scan base-package="com.dissofly.musicplayer.repository" />
+
+	<bean id="datasource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!--注意一下&characterEncoding要修改为&amp;characterEncoding -->
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/musiccenter?useUnicode=true&amp;characterEncoding=utf-8" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
+
+
+
+	<bean id="hibernateJpaVendorAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="datasource" />
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
+		<property name="packagesToScan" value="com.dissofly.musicplayer.entity" />
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+
+				<prop key="hibernate.show_sql">true</prop>
+				<!-- <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop> -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+
+				<prop key="hibernate.max_fetch_depth">0</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 3.Jpa事务管理 transactionManager 注入:entityManagerFactory -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<!-- 使用注解定义事务 proxy-target-class="true" 可以使用实现类 -->
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
+
+	<!-- Jpa 注解扫描以及 Jpa transactionManager 及 Jpa entityManagerFactory的依赖 base-package目录下带 
+		@Repository的实体 -->
+	<jpa:repositories base-package="com.dissofly.musicplayer"
+		transaction-manager-ref="transactionManager"
+		entity-manager-factory-ref="entityManagerFactory" />
+</beans> 
