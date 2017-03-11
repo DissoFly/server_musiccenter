@@ -1,5 +1,7 @@
 package com.dissofly.musicplayer.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,12 @@ public class DefaultUserService implements IUserService {
 	@Override
 	public User findByAccount(String account) {
 		return userRepo.findByAccount(account);
+	}
+
+	@Override
+	public List<User> getAll() {
+		
+		return (List<User>) userRepo.findAll();
 	}
 	
 	
