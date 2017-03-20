@@ -34,6 +34,11 @@ public class DefaultUserService implements IUserService {
 		
 		return (List<User>) userRepo.findAll();
 	}
+
+	@Override
+	public User findById(Integer id) {
+		return userRepo.findOne(id);
+	}
 	
 	
 

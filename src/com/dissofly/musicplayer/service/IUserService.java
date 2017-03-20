@@ -11,5 +11,7 @@ public interface IUserService {
 	User findByAccount(String account);
 	
 	List<User> getAll();
+	
+	User findById(Integer id);
 
 }
