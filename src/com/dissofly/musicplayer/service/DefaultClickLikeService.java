@@ -21,10 +21,13 @@ public class DefaultClickLikeService implements IClickLikeService {
 
 	@Autowired
 	IClickLikeRepository likeRepo;
+	@Autowired
+	ILogsService logsService;
 
 	@Override
 	public ClickLike save(ClickLike clickLike) {
-		return likeRepo.save(clickLike);
+		clickLike=likeRepo.save(clickLike);
+		return clickLike;
 	}
 
 	@Override
@@ -67,6 +70,18 @@ public class DefaultClickLikeService implements IClickLikeService {
 	public List<ClickLike> findMusicById(Integer musicId) {
 		// TODO Auto-generated method stub
 		return likeRepo.findMusicById(musicId);
+	}
+
+	@Override
+	public List<ClickLike> findByUserId(Integer userId) {
+		// TODO Auto-generated method stub
+		return likeRepo.findByUserId(userId);
+	}
+
+	@Override
+	public List<ClickLike> findMusicLikeByUserId(Integer userId) {
+		// TODO Auto-generated method stub
+		return likeRepo.findMusicLikeByUserId(userId);
 	}
 
 }

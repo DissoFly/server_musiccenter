@@ -3,6 +3,10 @@ package com.dissofly.musicplayer.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +24,8 @@ public class DefaultUserService implements IUserService {
 	IUserRepository userRepo;
 
 	@Override
-	public void save(User user) {
-		userRepo.save(user);
+	public User save(User user) {
+		return userRepo.save(user);
 	}
 
 	@Override
@@ -38,6 +42,19 @@ public class DefaultUserService implements IUserService {
 	@Override
 	public User findById(Integer id) {
 		return userRepo.findOne(id);
+	}
+
+	@Override
+	public Page<User> findAll(Integer page) {
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		PageRequest pageReqeust = new PageRequest(page, 10, sort);
+		return userRepo.findAll(pageReqeust);
+	}
+
+	@Override
+	public int getAllCount() {
+		// TODO Auto-generated method stub
+		return (int) userRepo.count();
 	}
 	
 	

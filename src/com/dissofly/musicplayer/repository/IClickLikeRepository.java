@@ -27,6 +27,13 @@ public interface IClickLikeRepository extends
 	@Query("from ClickLike clickLike where clickLike.beLikeId= ?1 and clickLike.isSong= true")
 	List<ClickLike> findMusicById(Integer musicId);
 
+	@Query("from ClickLike clickLike where clickLike.userId= ?1 ")
+	List<ClickLike> findByUserId(Integer userId);
+	
+	
+	@Query("from ClickLike clickLike where clickLike.userId= ?1 and clickLike.isSong= true")
+	List<ClickLike> findMusicLikeByUserId(Integer userId);
+
 	
 
 }

@@ -36,7 +36,6 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 @Controller
-@RequestMapping("/musicList")
 public class ListController {
 
 	public static final String SESSION_USER = "user";
@@ -48,21 +47,21 @@ public class ListController {
 
 	final static String commonPath = "F:/musicCenter/common/";
 
-	@RequestMapping(value = "/add")
+	@RequestMapping(value = "musicList/add")
 	public String add() {
 		return "MusicListAdd";
 	}
 
-	@RequestMapping(value = "/add_list", method = RequestMethod.POST)
+	@RequestMapping(value = "musicList/add_list", method = RequestMethod.POST)
 	public String add_list(@RequestParam String listName,
 			@RequestParam String listAbout, @RequestParam String musicList,
 			MultipartFile srcPath, HttpServletRequest request) {
-		MusicList muList = new MusicList();
-		muList = listService.save(muList);
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute(SESSION_USER);
 		if (user == null)
 			return "Login";
+		MusicList muList = new MusicList();
+		muList = listService.save(muList);
 		List<String> messages = new ArrayList<String>();
 		if (listName.equals("") || listAbout.equals("") || musicList.equals(""))
 			messages.add("错误：请填写完整信息！");

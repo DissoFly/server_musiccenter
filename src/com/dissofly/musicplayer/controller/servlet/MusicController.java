@@ -62,7 +62,7 @@ public class MusicController {
 		request.setAttribute("publicSongs",publicSongService.getAll(page).getContent());
 		request.setAttribute("songCount",publicSongService.getAllCount());
 		request.setAttribute("page",page);
-		request.setAttribute("allPage",publicSongService.getAllCount()/10);
+		request.setAttribute("allPage",(publicSongService.getAllCount()-1)/10);
 		return "AllMusic";
 	}
 
@@ -99,7 +99,7 @@ public class MusicController {
 	}
 
 	// 试听
-	@RequestMapping(value = "/listen/{file_id}")
+	@RequestMapping(value = "musicConfirm/listen/{file_id}")
 	public void onlineSong(@PathVariable Integer file_id,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
@@ -112,7 +112,7 @@ public class MusicController {
 		long p = 0;
 		long l = 0;
 		l = f.length();
-		if (request.getHeader("Range") != null) // 客户端请求的下载的文件块的开始字节
+		if (request.getHeader("Range") != null)
 		{
 			response.setStatus(javax.servlet.http.HttpServletResponse.SC_PARTIAL_CONTENT);
 			p = Long.parseLong(request.getHeader("Range")
@@ -137,14 +137,14 @@ public class MusicController {
 		}
 		fis.close();
 	}
-
-	@RequestMapping(value = "/musicConfirm")
-	public String fileConfirm(HttpServletRequest request) {
+	
+	@RequestMapping(value = "/musicConfirm/{page}")
+	public String fileConfirm(@PathVariable Integer page,HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute(SESSION_USER);
 		if (user == null)
 			return "Login";
-		List<UploadMessage> uploadMessages = uploadMessageService.getAll();
+		List<UploadMessage> uploadMessages = uploadMessageService.getAll(page).getContent();
 		List<User> users = userService.getAll();
 		request.setAttribute("uploadMessages", uploadMessages);
 		request.setAttribute("users", users);
@@ -171,16 +171,19 @@ public class MusicController {
 			message.setAlbum(musicInfo.getAlbum());
 			musicMessages.add(message);
 		}
+		System.out.println(uploadMessageService.getCount()+"+"+page+"+"+uploadMessageService.getCount()/10);
 		request.setAttribute("musicMessages", musicMessages);
-
+		request.setAttribute("confirmCount",uploadMessageService.getCount());
+		request.setAttribute("page",page);
+		request.setAttribute("allPage",(uploadMessageService.getCount()-1)/10);
 		return "MusicConfirm";
 
 	}
 
-	@RequestMapping(value = "/music_confirm")
+	@RequestMapping(value = {"/music_confirm","/musicConfirm/music_confirm"})
 	public String music_confirm(@RequestParam String songName,
 			@RequestParam Integer fileId, @RequestParam String artist,
-			@RequestParam String album, HttpServletRequest request,
+			@RequestParam String album,@RequestParam Integer page, HttpServletRequest request,
 			HttpServletResponse response) {
 		response.setContentType("text/html;charset=UTF-8");
 		try {
@@ -195,7 +198,7 @@ public class MusicController {
 			return "Login";
 		if (songName.equals("") || artist.equals("") || album.equals("")) {
 			request.setAttribute("message", "确认失败：请输入完整信息");
-			return fileConfirm(request);
+			return fileConfirm(page,request);
 		}
 		PublicSong publicSong = new PublicSong();
 		try {
@@ -209,7 +212,7 @@ public class MusicController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			request.setAttribute("message", "确认失败：文字转码失败");
-			return fileConfirm(request);
+			return fileConfirm(page,request);
 		}
 
 		publicSong.onPrePersist();
@@ -222,13 +225,13 @@ public class MusicController {
 		if (!isCopy) {
 			publicSongService.delectById(publicSong.getSongID());
 			request.setAttribute("message", "确认失败：复制文件失败");
-			return fileConfirm(request);
+			return fileConfirm(page,request);
 		}
 
 		// 删除记录
 		uploadMessageService.deleteById(fileId);
 		request.setAttribute("message", "确认成功");
-		return fileConfirm(request);
+		return fileConfirm(page,request);
 	}
 
 	private boolean copyFile(Integer fileId, Integer songID) {

@@ -16,6 +16,9 @@ public class DefaultAutoLoginSignService implements IAutoLoginSignService{
 	@Autowired
 	IAutoLoginSignRepository autoLSRepo;
 	
+	@Autowired
+	ILogsService logsService;
+	
 	@Override
 	public AutoLoginSign findByUserId(int userId) {
 		return autoLSRepo.findByUserId(userId);

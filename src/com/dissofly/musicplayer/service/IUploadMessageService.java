@@ -2,6 +2,8 @@ package com.dissofly.musicplayer.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.dissofly.musicplayer.entity.UploadMessage;
 
 
@@ -13,6 +15,9 @@ public interface IUploadMessageService {
 	void deleteById(Integer id);
 	
 	List<UploadMessage> getAll();
+	Page<UploadMessage> getAll(Integer page);
+	
+	Integer getCount();
 	
 
 }

@@ -13,14 +13,17 @@ import com.dissofly.musicplayer.entity.MusicList;
 public interface ICommentRepository extends
 		PagingAndSortingRepository<Comment, Integer> {
 
-	@Query("from Comment comment where comment.songId= ?1 ")
+	@Query("from Comment comment where comment.songId= ?1 and comment.isUnlook=false")
 	Page<Comment>findBySongId(Integer songId,Pageable page);
 	
-	@Query("from Comment comment where comment.songId= ?1 ")
+	@Query("from Comment comment where comment.songId= ?1 and comment.isUnlook=false")
 	List<Comment>findAllBySongId(Integer songId);
 	
-	@Query("from Comment comment where comment.userId= ?1 ")
+	@Query("from Comment comment where comment.userId= ?1 and comment.isUnlook=false")
 	Page<Comment>findByUserId(Integer userId,Pageable page);
+
+	@Query("from Comment comment where comment.userId= ?1 and comment.isUnlook=false")
+	List<Comment> findByUserId(Integer userId);
 	
 	
 }

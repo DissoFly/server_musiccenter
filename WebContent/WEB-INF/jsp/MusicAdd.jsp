@@ -99,7 +99,7 @@
 	<input type="file" id="files" multiple/>
 	<br/>
 	<output id="selectedFiles"></output>
-	<input id="uploadButton" type="button" value="Upload"/>
+	<input id="uploadButton" type="button" value="上传"/>
 </form>
 <div id="debug" style="height: 100px;border: 2px solid green;overflow:auto;">
 </div>

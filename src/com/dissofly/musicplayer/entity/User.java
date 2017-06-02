@@ -27,8 +27,15 @@ public class User extends DateRecord implements Serializable{
 	String email;
 	Long phoneNumber;
 	Boolean isAdmin;
+	Boolean isFreeze;
 	String avatar;
 	
+	public Boolean getIsFreeze() {
+		return isFreeze;
+	}
+	public void setIsFreeze(Boolean isFreeze) {
+		this.isFreeze = isFreeze;
+	}
 	public String getAvatar() {
 		return avatar;
 	}
@@ -50,6 +57,7 @@ public class User extends DateRecord implements Serializable{
 		this.email=email;
 		this.phoneNumber=phoneNumber;
 		this.isAdmin=isAdmin;
+		this.isFreeze=false;
 		onPrePersist();
 		
 	}

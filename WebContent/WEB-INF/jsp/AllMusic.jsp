@@ -7,7 +7,6 @@
 <title>所有歌曲</title>
 </head>
 <body>
-	${requestScope.songCount}
 	<table border="1">
 		<tr>
 			<td>编号</td>
@@ -32,8 +31,10 @@
 		<a href="${requestScope.page-1 }">上一页</a>
 	</c:if>
 	共${requestScope.songCount }首歌，第${requestScope.page+1 }/${requestScope.allPage+1 }页
-	<c:if test="${requestScope.page<requestScope.allPage }">
+	<c:if test="${(requestScope.page)<requestScope.allPage }">
 		<a href="${requestScope.page+1 }">下一页</a>
 	</c:if>
+	<p />
+	<a href="/musicCenter/main">返回主菜单</a>
 </body>
 </html>

@@ -3,12 +3,13 @@ package com.dissofly.musicplayer.entity;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.dissofly.musicplayer.util.DateRecord;
-
+@Entity
 public class Inbox extends DateRecord implements Serializable {
 
 	@Id
@@ -18,7 +19,6 @@ public class Inbox extends DateRecord implements Serializable {
 	private int userId;
 	private int geterId;
 	private String text;
-	private boolean isRead;
 	public int getInboxId() {
 		return inboxId;
 	}
@@ -42,12 +42,6 @@ public class Inbox extends DateRecord implements Serializable {
 	}
 	public void setText(String text) {
 		this.text = text;
-	}
-	public boolean isRead() {
-		return isRead;
-	}
-	public void setRead(boolean isRead) {
-		this.isRead = isRead;
 	}
 	
 	

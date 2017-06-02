@@ -69,8 +69,8 @@ public class MusicListController {
 	}
 	@RequestMapping(value = "/allList/{page}")
 	public String getAllListByPage(@PathVariable Integer page){
-		Page<MusicList> mPage=listService.getAll(page);
-		return new Gson().toJson(mPage.getContent());
+		Page<MusicList> musicLists=listService.getAll(page);
+		return new Gson().toJson(musicLists.getContent());
 	}
 	
 	@RequestMapping(value = "/listsrc/{src_id}")
@@ -79,6 +79,7 @@ public class MusicListController {
 		File file=new File(
 				path + "/" + src_id + ".jpg");
 		if(file.exists()){
+			response.setContentType("image/jpg");
 			byte[] buffer=new byte[1024];
 			FileInputStream fis=null;
 			BufferedInputStream bis=null;

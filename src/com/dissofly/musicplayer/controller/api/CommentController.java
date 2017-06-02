@@ -15,6 +15,7 @@ import com.dissofly.musicplayer.entity.Comment;
 import com.dissofly.musicplayer.entity.User;
 import com.dissofly.musicplayer.service.IClickLikeService;
 import com.dissofly.musicplayer.service.IComnentService;
+import com.dissofly.musicplayer.service.ILogsService;
 import com.dissofly.musicplayer.service.IUserService;
 import com.google.gson.Gson;
 
@@ -28,12 +29,15 @@ public class CommentController {
 	IUserService userService;
 	@Autowired
 	IClickLikeService likeService;
+	@Autowired
+	ILogsService logsService;
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(@RequestParam int songId,
 			@RequestParam String text,
 			@RequestParam int userId){
 		
+		logsService.save(userId, "Comment", "歌曲编号:"+songId+",评论:"+text);
 		Comment comment=new Comment();
 		comment.setSongId(songId);
 		comment.setText(text);
@@ -52,27 +56,33 @@ public class CommentController {
 		comnentService.save(comment);
 		return "SUCCESS_SAVE";
 	}
-	@RequestMapping(value = "/getBySongId/{song_id}")
-	public String getBySongId(@PathVariable Integer song_id){
-		return getBySongIdByPage(song_id,0);
+	@RequestMapping(value = "/getBySongId/{song_id}", method = RequestMethod.POST)
+	public String getBySongId(@PathVariable Integer song_id,@RequestParam int userId){
+		return getBySongIdByPage(song_id,0,userId);
 	}
 	
-	@RequestMapping(value = "/getBySongId/{song_id}/{page}")
+	@RequestMapping(value = "/getBySongId/{song_id}/{page}", method = RequestMethod.POST)
 	public String getBySongIdByPage(@PathVariable Integer song_id,
-			@PathVariable Integer page){
+			@PathVariable Integer page
+			,@RequestParam int userId){
 		List<Comment> comments=comnentService.findBySongId(song_id, page).getContent();
 		for(int i=0;i<comments.size();i++){
-			int userId=comments.get(i).getUserId();
-			User user=userService.findById(userId);
+			int commentUserId=comments.get(i).getUserId();
+			User user=userService.findById(commentUserId);
 			String name=user.getAccount();
 			comments.get(i).setUserName(name);
-			ClickLike clickLike = likeService.findCommentByUserById(userId,
-					comments.get(i).getCommentId());
-			if(clickLike == null){
-				comments.get(i).setUserLike(false);
+			if(userId>=0){
+				ClickLike clickLike = likeService.findCommentByUserById(userId,
+						comments.get(i).getCommentId());
+				if(clickLike == null){
+					comments.get(i).setUserLike(false);
+				}else{
+					comments.get(i).setUserLike(true);
+				}
 			}else{
-				comments.get(i).setUserLike(true);
+				comments.get(i).setUserLike(false);
 			}
+			
 		}
 		return new Gson().toJson(comments);
 	}

@@ -61,6 +61,25 @@ public class DefaultCommentService implements IComnentService{
 		// TODO Auto-generated method stub
 		return commentRepo.findOne(id);
 	}
+
+	@Override
+	public List<Comment> findByUserId(Integer userId) {
+		// TODO Auto-generated method stub
+		return commentRepo.findByUserId(userId);
+	}
+
+	@Override
+	public Page<Comment> findAll(Integer page) {
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		PageRequest pageReqeust = new PageRequest(page, 10, sort);
+		return commentRepo.findAll(pageReqeust);
+	}
+
+	@Override
+	public int getAllCount() {
+		// TODO Auto-generated method stub
+		return (int) commentRepo.count();
+	}
 	
 
 

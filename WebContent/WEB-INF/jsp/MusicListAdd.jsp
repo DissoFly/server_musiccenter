@@ -50,6 +50,7 @@
 			
 		</div>
 	</c:if>
-
+<p/>
+	<a href="/musicCenter/main">返回主菜单</a>
 </body>
 </html>
