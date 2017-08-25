@@ -141,7 +141,7 @@ public class AudioController {
 		l = f.length();
 		if (request.getHeader("Range") != null) // 客户端请求的下载的文件块的开始字节
 		{
-			response.setStatus(javax.servlet.http.HttpServletResponse.SC_PARTIAL_CONTENT);
+			response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 			p = Long.parseLong(request.getHeader("Range")
 					.replaceAll("bytes=", "").replaceAll("-", ""));
 		}
