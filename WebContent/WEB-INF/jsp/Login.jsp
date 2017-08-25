@@ -24,11 +24,11 @@
 		</table>
 	</form>
 	<c:if test="${requestScope.errors !=null}">
-		<p id="errors">
+		<p id="errors" align="center">
 			Error(s)!
-			<ul>
+			<ul >
 			<c:forEach var="error" items="${requestScope.errors}">
-				<li>${error}</li>
+				<li style="text-align: center;">${error}</li>
 			</c:forEach>
 			</ul>
 		</p>
